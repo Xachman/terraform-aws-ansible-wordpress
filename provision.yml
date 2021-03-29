@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  user: ubuntu
+  tasks:
+    - name: install packages
+      apt:
+        name:
+          - apache2
+          - php
+          - php-curl 
+          - php-gd 
+          - php-xml 
+          - php-xmlrpc 
+    - name: install mysql
+      shell: |
+        echo "mysql-server mysql-server/root_password password {{ mysql_password }}" | sudo debconf-set-selections
+        echo "mysql-server mysql-server/root_password_again password {{ mysql_password }}" | sudo debconf-set-selections
+        apt-get -y install mysql-server
+    
