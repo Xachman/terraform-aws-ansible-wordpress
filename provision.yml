@@ -13,9 +13,22 @@
           - php-gd 
           - php-xml 
           - php-xmlrpc 
+          - php-mysql
     - name: install mysql
       shell: |
         echo "mysql-server mysql-server/root_password password {{ mysql_password }}" | sudo debconf-set-selections
         echo "mysql-server mysql-server/root_password_again password {{ mysql_password }}" | sudo debconf-set-selections
         apt-get -y install mysql-server
+    - name: install wordpress 
+      shell: |
+        wget https://wordpress.org/latest.tar.gz -o /opt/wordpress-latest.tar.gz 
+        tar  --strip-components=1 -xzf latest.tar.gz -C /var/www/html
+        rm /var/www/html/index.html
+    - name: restart apache
+      service:
+        name: apache2
+        state: restarted
+    - name: create database 
+      shell: |
+        mysql -u root -p{{ mysql_password }} -e "CREATE DATABASE wordpress;" 
     
