@@ -22,8 +22,9 @@
     - name: install wordpress 
       shell: |
         wget https://wordpress.org/latest.tar.gz -o /opt/wordpress-latest.tar.gz 
-        tar  --strip-components=1 -xzf latest.tar.gz -C /var/www/html
+        tar  --strip-components=1 -xzf /opt/wordpress-latest.tar.gz -C /var/www/html
         rm /var/www/html/index.html
+        chown www-data:www-data -R /var/www/html
     - name: restart apache
       service:
         name: apache2
